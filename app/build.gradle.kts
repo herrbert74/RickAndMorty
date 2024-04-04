@@ -1,103 +1,135 @@
-import com.alvaroquintana.rickandmorty.buildsrc.Config
-import com.alvaroquintana.rickandmorty.buildsrc.Libs
+@file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
-    id("dagger.hilt.android.plugin")
-    id("io.gitlab.arturbosch.detekt")
+	alias(libs.plugins.android.application)
+	alias(libs.plugins.android.kotlin)
+	alias(libs.plugins.serialization)
+	id("kotlin-parcelize")
+	alias(libs.plugins.ksp)
+	alias(libs.plugins.detekt)
+	alias(libs.plugins.google.dagger.hilt.android)
 }
 
 android {
-    signingConfigs {
-        create("release") {
-            storeFile = file(findProperty("RICKANDMORTY_RELEASE_STORE_FILE").toString())
-            storePassword = findProperty("RICKANDMORTY_RELEASE_STORE_PASSWORD").toString()
-            keyAlias = findProperty("RICKANDMORTY_RELEASE_KEY_ALIAS").toString()
-            keyPassword = findProperty("RICKANDMORTY_RELEASE_KEY_PASSWORD").toString()
-        }
-    }
+	signingConfigs {
+		create("release") {
+			storeFile = file(findProperty("RICKANDMORTY_RELEASE_STORE_FILE").toString())
+			storePassword = findProperty("RICKANDMORTY_RELEASE_STORE_PASSWORD").toString()
+			keyAlias = findProperty("RICKANDMORTY_RELEASE_KEY_ALIAS").toString()
+			keyPassword = findProperty("RICKANDMORTY_RELEASE_KEY_PASSWORD").toString()
+		}
+	}
 
-    namespace = Config.applicationId
-    compileSdk = Config.compileSdk
+	namespace = "com.alvaroquintana.rickandmorty"
+	compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
-    defaultConfig {
-        minSdk = Config.minSdk
-        targetSdk = Config.targetSdk
-        versionCode = Config.code
-        versionName = Config.name
+	defaultConfig {
+		minSdk = libs.versions.minSdkVersion.get().toInt()
+		targetSdk = libs.versions.targetSdkVersion.get().toInt()
+		versionCode = libs.versions.versionCode.get().toInt()
+		versionName = libs.versions.versionName.toString()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-        signingConfig = signingConfigs.getByName("release")
-    }
+		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+		vectorDrawables {
+			useSupportLibrary = true
+		}
+		signingConfig = signingConfigs.getByName("release")
+	}
 
-    buildTypes {
-        debug {
-            isMinifyEnabled = false
-            isDebuggable = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-        release {
-            isMinifyEnabled = true
-            isDebuggable = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+	buildTypes {
+		debug {
+			isMinifyEnabled = false
+			isDebuggable = true
+			proguardFiles(
+				getDefaultProguardFile("proguard-android-optimize.txt"),
+				"proguard-rules.pro"
+			)
+		}
+		release {
+			isMinifyEnabled = true
+			isDebuggable = false
+			proguardFiles(
+				getDefaultProguardFile("proguard-android-optimize.txt"),
+				"proguard-rules.pro"
+			)
+		}
+	}
+	compileOptions {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	}
+	kotlinOptions {
+		jvmTarget = "17"
+	}
+	buildFeatures {
+		compose = true
+	}
+	composeOptions {
+		kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
+	}
+
+	//Needed for Mockk
+	testOptions { packaging { jniLibs { useLegacyPackaging = true } } }
+
+	packaging {
+		resources {
+			excludes += "/META-INF/{AL2.0,LGPL2.1}"
+		}
+	}
+
+
 }
 
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":domain"))
-    implementation(project(":usecases"))
+	implementation(project(":common"))
+	implementation(project(":data"))
+	implementation(project(":domain"))
+	implementation(project(":usecases"))
 
-    implementation(Libs.AndroidX.Navigation.fragmentKtx)
-    implementation(Libs.AndroidX.constraintLayout)
-    implementation(Libs.AndroidX.appCompat)
-    implementation(Libs.Hilt.android)
-    implementation(Libs.Hilt.navigationCompose)
-    implementation(Libs.Retrofit.retrofit)
-    implementation(Libs.Retrofit.converterGson)
-    implementation(Libs.JavaX.inject)
-    implementation(Libs.Arrow.coredata)
-    implementation(Libs.OkHttp3.loginInterceptor)
-    implementation(Libs.AndroidX.Activity.compose)
-    implementation(Libs.AndroidX.Compose.Material3.material3)
-    implementation(Libs.AndroidX.Compose.UI.ui)
-    implementation(Libs.AndroidX.Navigation.compose)
-    implementation(Libs.Coil.compose)
-    implementation(Libs.AndroidX.Room.runtime)
-    implementation(Libs.AndroidX.Room.ktx)
-    detektPlugins(Libs.Detekt.rulesCompose)
-    implementation(Libs.Lottie.compose)
+	implementation(platform(libs.androidx.compose.bom))
+	implementation(libs.androidx.compose.ui.ui)
+	implementation(libs.androidx.compose.ui.graphics)
+	implementation(libs.androidx.compose.ui.text)
+	implementation(libs.androidx.compose.ui.unit)
+	implementation(libs.androidx.compose.ui.tooling)
+	implementation(libs.androidx.compose.ui.toolingPreview)
+	implementation(libs.androidx.compose.material3)
+	implementation(libs.androidx.navigation.common)
+	implementation(libs.androidx.navigation.compose)
 
-    ksp(Libs.AndroidX.Room.compiler)
-    ksp(Libs.Hilt.compiler)
+	implementation(libs.google.dagger.hilt.android)
+	add("ksp", libs.androidx.hilt.compiler)
+	kspTest(libs.androidx.hilt.compiler)
+	add("ksp", libs.google.dagger.hilt.androidCompiler)
+	kspTest(libs.google.dagger.hilt.androidCompiler)
+	kspAndroidTest(libs.google.dagger.hilt.androidCompiler)
+	implementation(libs.androidx.hilt.navigation.compose)
+	implementation(libs.kotlinResult.result)
+	implementation(libs.kotlinResult.coroutines)
+	implementation(libs.squareUp.retrofit2.retrofit)
+	implementation(libs.squareUp.retrofit2.converterGson)
+	implementation(libs.inject)
+
+	//implementation(Libs.Arrow.coredata)
+
+	implementation(libs.squareUp.okhttp3.loggingInterceptor)
+
+	implementation(libs.androidx.activity.compose)
+	implementation(libs.coil)
+	implementation(libs.androidx.room.common)
+	implementation(libs.androidx.room.runtime)
+	implementation(libs.androidx.room.ktx)
+	//detektPlugins(Libs.Detekt.rulesCompose)
+	implementation(libs.lottie.compose)
+
+	add("ksp", libs.androidx.room.compiler)
+
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+	kotlinOptions.freeCompilerArgs += "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+	kotlinOptions.freeCompilerArgs += "-opt-in=androidx.compose.ui.test.ExperimentalTestApi"
 }

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-	namespace = "com.alvaroquintana.data"
+	namespace = "com.alvaroquintana.common"
 	compileSdk = 34
 
 	defaultConfig {
@@ -29,13 +29,6 @@ android {
 }
 
 dependencies {
-	implementation(project(":common"))
-	implementation(project(":domain"))
 
-	implementation(libs.kotlinx.coroutines.core)
-	implementation(libs.squareUp.retrofit2.retrofit)
-	implementation(libs.inject)
 	implementation(libs.kotlinResult.result)
-	implementation(libs.kotlinResult.coroutines)
-
 }

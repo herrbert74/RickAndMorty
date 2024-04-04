@@ -1,6 +1,5 @@
 package com.alvaroquintana.rickandmorty.data.database
 
-
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -9,5 +8,5 @@ import androidx.room.TypeConverters
 @TypeConverters(EpisodeConverter::class)
 abstract class FavoriteDataBase : RoomDatabase() {
 
-    abstract fun favoriteCharacterDao(): FavoriteCharacterDao
+	abstract fun favoriteCharacterDao(): FavoriteCharacterDao
 }

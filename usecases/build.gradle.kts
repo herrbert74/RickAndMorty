@@ -1,21 +1,39 @@
-import com.alvaroquintana.rickandmorty.buildsrc.Libs
-
 plugins {
-    id("java-library")
-    id("org.jetbrains.kotlin.jvm")
+	alias(libs.plugins.androidLibrary)
+	alias(libs.plugins.android.kotlin)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+android {
+	namespace = "com.alvaroquintana.usecases"
+	compileSdk = 34
+
+	defaultConfig {
+		minSdk = 24
+
+		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+		consumerProguardFiles("consumer-rules.pro")
+	}
+
+	buildTypes {
+		release {
+			isMinifyEnabled = false
+			proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+		}
+	}
+
+	compileOptions {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	}
+
 }
 
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":domain"))
+	implementation(project(":data"))
+	implementation(project(":domain"))
 
-    implementation(Libs.Kotlin.Coroutines.core)
-    implementation(Libs.Retrofit.retrofit)
-    implementation(Libs.JavaX.inject)
-    implementation(Libs.Arrow.coredata)
+	implementation(libs.kotlinx.coroutines.core)
+	implementation(libs.squareUp.retrofit2.retrofit)
+	implementation(libs.inject)
+	implementation(libs.kotlinResult.result)
 }
