@@ -6,26 +6,23 @@ import com.alvaroquintana.rickandmorty.data.source.CharacterDataSource
 import com.alvaroquintana.rickandmorty.data.source.LocalDataSource
 import com.alvaroquintana.rickandmorty.domain.Character
 import com.alvaroquintana.rickandmorty.domain.CharacterResult
+import com.alvaroquintana.rickandmorty.domain.api.CharacterRepository
 import javax.inject.Inject
 
-class CharacterRepository @Inject constructor(
+class CharacterAccessor @Inject constructor(
 	private val characterDataSource: CharacterDataSource,
 	private val localDataSource: LocalDataSource
-) {
+) : CharacterRepository {
 
-	fun allFavoriteCharactersFlow() =
-		localDataSource.allFavoritesFlow()
+	override fun allFavoriteCharactersFlow() = localDataSource.allFavoritesFlow()
 
-	suspend fun getAllFavoriteCharacters() =
-		localDataSource.getAllFavoriteCharacters()
+	override suspend fun getAllFavoriteCharacters() = localDataSource.getAllFavoriteCharacters()
 
-	suspend fun insertFavoriteCharacter(id: Character) =
-		localDataSource.insertFavoriteCharacter(id)
+	override suspend fun insertFavoriteCharacter(id: Character) = localDataSource.insertFavoriteCharacter(id)
 
-	suspend fun deleteFavoriteCharacter(id: Character) =
-		localDataSource.deleteFavoriteCharacter(id)
+	override suspend fun deleteFavoriteCharacter(id: Character) = localDataSource.deleteFavoriteCharacter(id)
 
-	suspend fun getCharacters(
+	override suspend fun getCharacters(
 		page: Int,
 		nameFiltered: String?,
 		statusFiltered: String?,
@@ -45,15 +42,6 @@ class CharacterRepository @Inject constructor(
 		}
 	}
 
-	suspend fun getCharacterById(id: Int): ApiResult<Character> {
-		return apiRunCatching {
-			val character = characterDataSource.getCharacterById(id)
-			val isFavorite = localDataSource.isFavoriteCharacterById(id)
-
-			character.copy(favorite = isFavorite)
-		}
-	}
-
 	private fun (List<Character>).mapWithFavoriteList(favoritesList: List<Character>): List<Character> {
 		val resultList = map { serverCharacter ->
 			if (favoritesList.find { it.id == serverCharacter.id } != null) {
@@ -64,4 +52,13 @@ class CharacterRepository @Inject constructor(
 		}
 		return resultList
 	}
+
+	override suspend fun getCharacterById(id: Int): ApiResult<Character> {
+		return apiRunCatching {
+			val character = characterDataSource.getCharacterById(id)
+			val isFavorite = localDataSource.isFavoriteCharacterById(id)
+			character.copy(favorite = isFavorite)
+		}
+	}
+
 }

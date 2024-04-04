@@ -1,6 +1,6 @@
-package com.alvaroquintana.rickandmorty.usecases
+package com.alvaroquintana.rickandmorty.domain.usecase
 
-import com.alvaroquintana.rickandmorty.data.repository.CharacterRepository
+import com.alvaroquintana.rickandmorty.domain.api.CharacterRepository
 import javax.inject.Inject
 
 class GetAllCharacterUseCase @Inject constructor(private val characterRepository: CharacterRepository) {

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.alvaroquintana.rickandmorty.data.Error
 import com.alvaroquintana.rickandmorty.data.toError
 import com.alvaroquintana.rickandmorty.domain.Character
-import com.alvaroquintana.rickandmorty.usecases.GetCharacterByIdUseCase
-import com.alvaroquintana.rickandmorty.usecases.UpdateFavoriteCharacterUseCase
+import com.alvaroquintana.rickandmorty.domain.usecase.GetCharacterByIdUseCase
+import com.alvaroquintana.rickandmorty.domain.usecase.UpdateFavoriteCharacterUseCase
 import com.github.michaelbull.result.fold
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

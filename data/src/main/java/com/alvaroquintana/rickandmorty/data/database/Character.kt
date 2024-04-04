@@ -9,19 +9,19 @@ import com.google.gson.Gson
 
 @Entity(tableName = "Favorite")
 data class Character(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val name: String,
-    val image: String,
-    val gender: String,
-    val status: String,
-    val species: String,
-    val type: String,
-    val url: String,
-    val created: String,
-    @field:TypeConverters(EpisodeConverter::class) val episode: EpisodeList,
-    @Embedded(prefix = "location_") val location: DataObject,
-    @Embedded(prefix = "origin_") val origin: DataObject,
-    val favorite: Boolean = true
+	@PrimaryKey(autoGenerate = true) val id: Int,
+	val name: String,
+	val image: String,
+	val gender: String,
+	val status: String,
+	val species: String,
+	val type: String,
+	val url: String,
+	val created: String,
+	@field:TypeConverters(EpisodeConverter::class) val episode: EpisodeList,
+	@Embedded(prefix = "location_") val location: DataObject,
+	@Embedded(prefix = "origin_") val origin: DataObject,
+	val favorite: Boolean = true
 )
 
 data class EpisodeList(

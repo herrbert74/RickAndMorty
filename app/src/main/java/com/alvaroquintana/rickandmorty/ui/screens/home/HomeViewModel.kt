@@ -7,9 +7,9 @@ import com.alvaroquintana.rickandmorty.common.TAB_CHARACTERS
 import com.alvaroquintana.rickandmorty.data.Error
 import com.alvaroquintana.rickandmorty.data.toError
 import com.alvaroquintana.rickandmorty.domain.Character
-import com.alvaroquintana.rickandmorty.usecases.AllFavoriteCharactersFlowUseCase
-import com.alvaroquintana.rickandmorty.usecases.GetAllCharacterUseCase
-import com.alvaroquintana.rickandmorty.usecases.UpdateFavoriteCharacterUseCase
+import com.alvaroquintana.rickandmorty.domain.usecase.AllFavoriteCharactersFlowUseCase
+import com.alvaroquintana.rickandmorty.domain.usecase.GetAllCharacterUseCase
+import com.alvaroquintana.rickandmorty.domain.usecase.UpdateFavoriteCharacterUseCase
 import com.github.michaelbull.result.fold
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

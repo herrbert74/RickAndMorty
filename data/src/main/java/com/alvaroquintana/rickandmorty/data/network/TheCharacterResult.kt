@@ -1,4 +1,4 @@
-package com.alvaroquintana.rickandmorty.data.server
+package com.alvaroquintana.rickandmorty.data.network
 
 data class TheCharacterResult(
 	val info: Info,

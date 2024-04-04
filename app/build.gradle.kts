@@ -106,23 +106,12 @@ dependencies {
 	implementation(libs.androidx.hilt.navigation.compose)
 	implementation(libs.kotlinResult.result)
 	implementation(libs.kotlinResult.coroutines)
-	implementation(libs.squareUp.retrofit2.retrofit)
-	implementation(libs.squareUp.retrofit2.converterGson)
 	implementation(libs.inject)
-
-	//implementation(Libs.Arrow.coredata)
-
-	implementation(libs.squareUp.okhttp3.loggingInterceptor)
 
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.coil)
-	implementation(libs.androidx.room.common)
-	implementation(libs.androidx.room.runtime)
-	implementation(libs.androidx.room.ktx)
 	//detektPlugins(Libs.Detekt.rulesCompose)
 	implementation(libs.lottie.compose)
-
-	add("ksp", libs.androidx.room.compiler)
 
 }
 

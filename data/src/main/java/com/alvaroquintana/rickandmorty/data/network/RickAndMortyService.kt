@@ -1,4 +1,4 @@
-package com.alvaroquintana.rickandmorty.data.server
+package com.alvaroquintana.rickandmorty.data.network
 
 import com.alvaroquintana.rickandmorty.domain.Character
 import com.alvaroquintana.rickandmorty.domain.CharacterResult

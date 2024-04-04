@@ -1,6 +1,6 @@
-package com.alvaroquintana.rickandmorty.data.server
+package com.alvaroquintana.rickandmorty.data.network
 
-import com.alvaroquintana.rickandmorty.BuildConfig
+import com.alvaroquintana.data.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

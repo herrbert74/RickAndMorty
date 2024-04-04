@@ -7,8 +7,8 @@ import com.alvaroquintana.rickandmorty.domain.DataObject
 import com.alvaroquintana.rickandmorty.domain.Info
 import com.alvaroquintana.rickandmorty.data.database.Character as DBCharacter
 import com.alvaroquintana.rickandmorty.data.database.DataObject as DBDataObject
-import com.alvaroquintana.rickandmorty.data.server.Character as ServerCharacter
-import com.alvaroquintana.rickandmorty.data.server.TheCharacterResult as ServerCharacterResult
+import com.alvaroquintana.rickandmorty.data.network.Character as ServerCharacter
+import com.alvaroquintana.rickandmorty.data.network.TheCharacterResult as ServerCharacterResult
 
 fun Character.toRoomCharacter(): DBCharacter =
 	DBCharacter(
