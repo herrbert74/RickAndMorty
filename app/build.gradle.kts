@@ -84,7 +84,6 @@ dependencies {
 	implementation(project(":common"))
 	implementation(project(":data"))
 	implementation(project(":domain"))
-	implementation(project(":usecases"))
 
 	implementation(platform(libs.androidx.compose.bom))
 	implementation(libs.androidx.compose.ui.ui)
