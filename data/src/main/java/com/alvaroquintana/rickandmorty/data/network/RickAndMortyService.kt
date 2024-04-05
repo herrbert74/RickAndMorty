@@ -1,7 +1,6 @@
 package com.alvaroquintana.rickandmorty.data.network
 
 import com.alvaroquintana.rickandmorty.domain.Character
-import com.alvaroquintana.rickandmorty.domain.CharacterResult
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -15,7 +14,7 @@ interface RickAndMortyService {
 		@Query("name") nameFiltered: String?,
 		@Query("gender") genderFiltered: String?,
 		@Query("status") statusFiltered: String?
-	): CharacterResult
+	): CharacterResultDto
 
 	@GET("character/{id}")
 	suspend fun getCharacterByIdAsync(@Path("id") id: Int): Character

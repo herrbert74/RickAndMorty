@@ -14,17 +14,17 @@ interface FavoriteCharacterDao {
     suspend fun favoriteCount(): Int
 
     @Query("SELECT * FROM Favorite")
-    fun favoriteListFlow(): Flow<List<Character>>
+    fun favoriteListFlow(): Flow<List<CharacterDbo>>
 
     @Query("SELECT * FROM Favorite")
-    suspend fun favoriteCharactersList(): List<Character>
+    suspend fun favoriteCharactersList(): List<CharacterDbo>
 
     @Query("SELECT * FROM Favorite WHERE id = :idCharacter LIMIT 1")
-    suspend fun isFavoriteCharacters(idCharacter: Int): Character?
+    suspend fun isFavoriteCharacters(idCharacter: Int): CharacterDbo?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFavoriteCharacter(favoriteCharacter: Character)
+    suspend fun insertFavoriteCharacter(favoriteCharacter: CharacterDbo)
 
     @Delete
-    suspend fun deleteFavoriteCharacter(favoriteCharacter: Character)
+    suspend fun deleteFavoriteCharacter(favoriteCharacter: CharacterDbo)
 }

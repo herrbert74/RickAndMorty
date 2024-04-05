@@ -3,9 +3,10 @@ package com.alvaroquintana.rickandmorty.data.repository
 import com.alvaroquintana.common.ext.ApiResult
 import com.alvaroquintana.common.ext.apiRunCatching
 import com.alvaroquintana.rickandmorty.data.database.FavoriteCharacterDao
+import com.alvaroquintana.rickandmorty.data.database.toCharacter
+import com.alvaroquintana.rickandmorty.data.database.toDbo
 import com.alvaroquintana.rickandmorty.data.network.RickAndMortyService
-import com.alvaroquintana.rickandmorty.data.toDomainCharacter
-import com.alvaroquintana.rickandmorty.data.toRoomCharacter
+import com.alvaroquintana.rickandmorty.data.network.toCharacterResult
 import com.alvaroquintana.rickandmorty.domain.Character
 import com.alvaroquintana.rickandmorty.domain.CharacterResult
 import com.alvaroquintana.rickandmorty.domain.api.CharacterRepository
@@ -20,20 +21,20 @@ class CharacterAccessor @Inject constructor(
 
 	override fun allFavoriteCharactersFlow(): Flow<List<Character>> = favoriteCharacterDao.favoriteListFlow()
 		.map { characterListDB ->
-			characterListDB.map { it.toDomainCharacter() }
+			characterListDB.map { it.toCharacter() }
 		}
 
 	override suspend fun getAllFavoriteCharacters(): List<Character> = favoriteCharacterDao.favoriteCharactersList()
 		.map { characterListDB ->
-			characterListDB.toDomainCharacter()
+			characterListDB.toCharacter()
 		}
 
 	override suspend fun insertFavoriteCharacter(character: Character) {
-		favoriteCharacterDao.insertFavoriteCharacter(character.toRoomCharacter())
+		favoriteCharacterDao.insertFavoriteCharacter(character.toDbo())
 	}
 
 	override suspend fun deleteFavoriteCharacter(character: Character) {
-		favoriteCharacterDao.deleteFavoriteCharacter(character.toRoomCharacter())
+		favoriteCharacterDao.deleteFavoriteCharacter(character.toDbo())
 	}
 
 	override suspend fun getCharacters(
@@ -49,7 +50,7 @@ class CharacterAccessor @Inject constructor(
 				nameFiltered = nameFiltered,
 				genderFiltered = genderFiltered,
 				statusFiltered = statusFiltered
-			)
+			).toCharacterResult()
 
 			val charactersListFinal = characterList.results.mapWithFavoriteList(favoritesList)
 			CharacterResult(characterList.info, charactersListFinal)
@@ -57,11 +58,11 @@ class CharacterAccessor @Inject constructor(
 	}
 
 	private fun (List<Character>).mapWithFavoriteList(favoritesList: List<Character>): List<Character> {
-		val resultList = map { serverCharacter ->
-			if (favoritesList.find { it.id == serverCharacter.id } != null) {
-				serverCharacter.copy(favorite = true)
+		val resultList = map { character ->
+			if (favoritesList.find { it.id == character.id } != null) {
+				character.copy(favorite = true)
 			} else {
-				serverCharacter.copy(favorite = false)
+				character.copy(favorite = false)
 			}
 		}
 		return resultList
