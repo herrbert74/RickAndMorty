@@ -2,7 +2,7 @@ package com.alvaroquintana.rickandmorty.data.repository
 
 import com.alvaroquintana.common.ext.ApiResult
 import com.alvaroquintana.common.ext.apiRunCatching
-import com.alvaroquintana.rickandmorty.data.source.CharacterDataSource
+import com.alvaroquintana.rickandmorty.data.network.RickAndMortyService
 import com.alvaroquintana.rickandmorty.data.source.LocalDataSource
 import com.alvaroquintana.rickandmorty.domain.Character
 import com.alvaroquintana.rickandmorty.domain.CharacterResult
@@ -10,7 +10,7 @@ import com.alvaroquintana.rickandmorty.domain.api.CharacterRepository
 import javax.inject.Inject
 
 class CharacterAccessor @Inject constructor(
-	private val characterDataSource: CharacterDataSource,
+	private val rickAndMortyService: RickAndMortyService,
 	private val localDataSource: LocalDataSource
 ) : CharacterRepository {
 
@@ -30,7 +30,7 @@ class CharacterAccessor @Inject constructor(
 	): ApiResult<CharacterResult> {
 		return apiRunCatching {
 			val favoritesList = localDataSource.getAllFavoriteCharacters()
-			val characterList = characterDataSource.getCharacters(
+			val characterList = rickAndMortyService.getCharactersAsync(
 				page = page,
 				nameFiltered = nameFiltered,
 				genderFiltered = genderFiltered,
@@ -55,7 +55,7 @@ class CharacterAccessor @Inject constructor(
 
 	override suspend fun getCharacterById(id: Int): ApiResult<Character> {
 		return apiRunCatching {
-			val character = characterDataSource.getCharacterById(id)
+			val character = rickAndMortyService.getCharacterByIdAsync(id)
 			val isFavorite = localDataSource.isFavoriteCharacterById(id)
 			character.copy(favorite = isFavorite)
 		}
