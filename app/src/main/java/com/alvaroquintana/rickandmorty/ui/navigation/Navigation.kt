@@ -40,6 +40,7 @@ fun Navigation() {
 	) {
 		composable(NavItem.Splash) {
 			SplashScreen(onNavigate = {
+				navController.popBackStack()
 				navController.navigate(NavItem.Home.route)
 			})
 		}
