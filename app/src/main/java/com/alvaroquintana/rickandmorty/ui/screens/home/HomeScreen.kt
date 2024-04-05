@@ -11,16 +11,16 @@ import com.alvaroquintana.rickandmorty.ui.composables.CollapsingLayout
 @ExperimentalFoundationApi
 @Composable
 fun HomeScreen(onNavigate: (Int) -> Unit) {
-    Scaffold(
-        topBar = { MainAppBar() },
-        content = { padding ->
-            CollapsingLayout(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(padding),
-                collapsingTop = { FilterRow() },
-                bodyContent = { TabbedView(onNavigate = onNavigate) }
-            )
-        }
-    )
+	Scaffold(
+		topBar = { MainAppBar() },
+		content = { padding ->
+			CollapsingLayout(
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(padding),
+				collapsingTop = { FilterRow() },
+				bodyContent = { TabbedView(onNavigate = onNavigate) }
+			)
+		}
+	)
 }

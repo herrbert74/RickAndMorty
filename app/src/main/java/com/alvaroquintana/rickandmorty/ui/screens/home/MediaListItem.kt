@@ -47,95 +47,94 @@ const val DELAY_ANIMATED_VISIBILITY = 70L
 @Suppress("LongParameterList", "LongMethod")
 @Composable
 fun MediaListItem(
-    index: Int,
-    mediaItem: Character,
-    visible: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    vm: HomeViewModel = hiltViewModel()
+	index: Int,
+	mediaItem: Character,
+	visible: Boolean,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier,
+	vm: HomeViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val clickEnabled = remember { mutableStateOf(true) }
-    var selected by remember { mutableStateOf(false) }
-    val scale = remember { Animatable(initialValue = 1f) }
-    FavScaleAnimation(selected, clickEnabled, scale, mediaItem.favorite)
+	val context = LocalContext.current
+	val clickEnabled = remember { mutableStateOf(true) }
+	var selected by remember { mutableStateOf(false) }
+	val scale = remember { Animatable(initialValue = 1f) }
+	FavScaleAnimation(selected, clickEnabled, scale, mediaItem.favorite)
 
+	val animatedVisibility = remember {
+		Animatable(if (visible) 1f else 0f)
+	}
 
-    val animatedVisibility = remember {
-        Animatable(if (visible) 1f else 0f)
-    }
+	LaunchedEffect(index) {
+		delay(index * DELAY_ANIMATED_VISIBILITY)
+		animatedVisibility.animateTo(1f, animationSpec = tween(durationMillis = 150))
+	}
 
-    LaunchedEffect(index) {
-        delay(index * DELAY_ANIMATED_VISIBILITY)
-        animatedVisibility.animateTo(1f, animationSpec = tween(durationMillis = 150))
-    }
+	Card(
+		modifier = modifier
+			.alpha(animatedVisibility.value)
+			.clickable { onClick() }
+	) {
+		Row(
+			verticalAlignment = Alignment.CenterVertically,
+			modifier = Modifier
+				.background(MaterialTheme.colorScheme.primary)
+				.fillMaxWidth()
+				.padding(paddingMedium)
+		) {
+			// Icon
+			Box(
+				modifier = Modifier
+					.height(cellWidth)
+					.width(cellWidth)
+			) {
+				AsyncImage(
+					model = mediaItem.image,
+					contentDescription = context.getString(R.string.image),
+					modifier = Modifier.fillMaxSize(),
+					contentScale = ContentScale.Crop
+				)
+			}
 
-    Card(
-        modifier = modifier
-            .alpha(animatedVisibility.value)
-            .clickable { onClick() }
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary)
-                .fillMaxWidth()
-                .padding(paddingMedium)
-        ) {
-            // Icon
-            Box(
-                modifier = Modifier
-                    .height(cellWidth)
-                    .width(cellWidth)
-            ) {
-                AsyncImage(
-                    model = mediaItem.image,
-                    contentDescription = context.getString(R.string.image),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            }
+			// TEXT
+			Box(
+				modifier = Modifier
+					.fillMaxWidth()
+					.weight(1f)
+					.padding(paddingMedium)
+			) {
+				Text(
+					text = mediaItem.name,
+					style = MaterialTheme.typography.titleMedium
+				)
+			}
 
-            // TEXT
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(paddingMedium)
-            ) {
-                Text(
-                    text = mediaItem.name,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            // FAV
-            Box(
-                modifier = Modifier
-                    .height(cellWidth)
-                    .width(cellWidth)
-            ) {
-                IconButton(
-                    onClick = {
-                        if (clickEnabled.value) {
-                            if (!mediaItem.favorite) selected = !selected
-                            vm.saveFavorite(!mediaItem.favorite, mediaItem)
-                        }
-                    },
-                    modifier = Modifier
-                        .scale(scale = scale.value)
-                        .height(favWidth)
-                        .width(favWidth)
-                ) {
-                    val icons =
-                        if (mediaItem.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder
-                    Icon(
-                        imageVector = icons,
-                        tint = Red,
-                        contentDescription = context.getString(R.string.favorite)
-                    )
-                }
-            }
-        }
-    }
+			// FAV
+			Box(
+				modifier = Modifier
+					.height(cellWidth)
+					.width(cellWidth)
+			) {
+				IconButton(
+					onClick = {
+						if (clickEnabled.value) {
+							if (!mediaItem.favorite) selected = !selected
+							vm.saveFavorite(!mediaItem.favorite, mediaItem)
+						}
+					},
+					modifier = Modifier
+						.scale(scale = scale.value)
+						.height(favWidth)
+						.width(favWidth)
+				) {
+					val icons =
+						if (mediaItem.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder
+					Icon(
+						imageVector = icons,
+						tint = Red,
+						contentDescription = context.getString(R.string.favorite)
+					)
+				}
+			}
+		}
+	}
 }

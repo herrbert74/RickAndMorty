@@ -39,97 +39,97 @@ import com.alvaroquintana.rickandmorty.ui.theme.paddingMedium
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppBar(vm: HomeViewModel = hiltViewModel()) {
-    val context = LocalContext.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
+	val context = LocalContext.current
+	val keyboardController = LocalSoftwareKeyboardController.current
+	val focusManager = LocalFocusManager.current
+	val focusRequester = remember { FocusRequester() }
 
-    val title: String = vm.nameFilter ?: stringResource(R.string.app_name)
-    var searchText by remember { mutableStateOf(title) }
-    var isSearchExpanded by remember { mutableStateOf(false) }
+	val title: String = vm.nameFilter ?: stringResource(R.string.app_name)
+	var searchText by remember { mutableStateOf(title) }
+	var isSearchExpanded by remember { mutableStateOf(false) }
 
-    TopAppBar(
-        title = {
-            BasicTextField(
-                value = searchText,
-                onValueChange = { newText ->
-                    searchText = newText
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        isSearchExpanded = !isSearchExpanded
+	TopAppBar(
+		title = {
+			BasicTextField(
+				value = searchText,
+				onValueChange = { newText ->
+					searchText = newText
+				},
+				keyboardOptions = KeyboardOptions(
+					imeAction = ImeAction.Search
+				),
+				keyboardActions = KeyboardActions(
+					onSearch = {
+						isSearchExpanded = !isSearchExpanded
 
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
+						keyboardController?.hide()
+						focusManager.clearFocus()
 
-                        vm.visibleCards = 0
-                        vm.nextPage = 1
-                        vm.nameFilter = searchText
-                        vm.cleanList()
-                        vm.findCharacters()
-                    }
-                ),
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .fillMaxSize(),
-                textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 18.sp
-                ),
-                cursorBrush = SolidColor(MaterialTheme.colorScheme.secondary),
-                singleLine = true,
-                maxLines = 1,
-                decorationBox = { innerTextField ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(end = paddingMedium),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        innerTextField()
-                    }
-                }
-            )
+						vm.visibleCards = 0
+						vm.nextPage = 1
+						vm.nameFilter = searchText
+						vm.cleanList()
+						vm.findCharacters()
+					}
+				),
+				modifier = Modifier
+					.focusRequester(focusRequester)
+					.fillMaxSize(),
+				textStyle = TextStyle(
+					color = MaterialTheme.colorScheme.secondary,
+					fontSize = 18.sp
+				),
+				cursorBrush = SolidColor(MaterialTheme.colorScheme.secondary),
+				singleLine = true,
+				maxLines = 1,
+				decorationBox = { innerTextField ->
+					Box(
+						modifier = Modifier
+							.fillMaxSize()
+							.padding(end = paddingMedium),
+						contentAlignment = Alignment.CenterStart
+					) {
+						innerTextField()
+					}
+				}
+			)
 
-        },
-        actions = {
-            IconButton(
-                onClick = {
-                    if (isSearchExpanded) {
-                        // RESET
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
-                        searchText = context.getString(R.string.app_name)
+		},
+		actions = {
+			IconButton(
+				onClick = {
+					if (isSearchExpanded) {
+						// RESET
+						keyboardController?.hide()
+						focusManager.clearFocus()
+						searchText = context.getString(R.string.app_name)
 
-                        vm.nextPage = 1
-                        vm.nameFilter = null
-                        vm.cleanList()
-                        vm.findCharacters()
-                    } else {
-                        // SEARCH
-                        if (searchText == context.getString(R.string.app_name)) {
-                            searchText = ""
-                        }
-                        keyboardController?.show()
-                        focusRequester.requestFocus()
-                    }
+						vm.nextPage = 1
+						vm.nameFilter = null
+						vm.cleanList()
+						vm.findCharacters()
+					} else {
+						// SEARCH
+						if (searchText == context.getString(R.string.app_name)) {
+							searchText = ""
+						}
+						keyboardController?.show()
+						focusRequester.requestFocus()
+					}
 
-                    isSearchExpanded = !isSearchExpanded
-                }) {
+					isSearchExpanded = !isSearchExpanded
+				}) {
 
-                val contentString = if (isSearchExpanded)
-                    context.getString(R.string.close)
-                else
-                    context.getString(R.string.search)
+				val contentString = if (isSearchExpanded)
+					context.getString(R.string.close)
+				else
+					context.getString(R.string.search)
 
-                Icon(
-                    imageVector = if (isSearchExpanded) Icons.Default.Close else Icons.Default.Search,
-                    contentDescription = contentString
-                )
-            }
-        }
-    )
+				Icon(
+					imageVector = if (isSearchExpanded) Icons.Default.Close else Icons.Default.Search,
+					contentDescription = contentString
+				)
+			}
+		}
+	)
 }

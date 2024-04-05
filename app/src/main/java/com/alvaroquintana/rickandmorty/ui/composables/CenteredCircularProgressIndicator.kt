@@ -12,18 +12,18 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CenteredCircularProgressIndicator(isLoading: Boolean, modifier: Modifier = Modifier) {
-    if (isLoading) {
-        Box(
-            modifier = modifier
-                .then(Modifier.fillMaxSize())
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(30.dp),
-                strokeWidth = 4.dp,
-                color = MaterialTheme.colorScheme.secondary
-            )
-        }
-    }
+	if (isLoading) {
+		Box(
+			modifier = modifier
+				.then(Modifier.fillMaxSize())
+		) {
+			CircularProgressIndicator(
+				modifier = Modifier
+					.align(Alignment.Center)
+					.size(30.dp),
+				strokeWidth = 4.dp,
+				color = MaterialTheme.colorScheme.secondary
+			)
+		}
+	}
 }

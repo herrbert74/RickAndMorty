@@ -1,48 +1,48 @@
 <resources>
-    <string name="app_name">RickAndMorty</string>
-    <string name="error_connectivity">Error de conexión</string>
-    <string name="error_server">Error de servidor</string>
-    <string name="error_unknown">Error desconocido</string>
-    <string name="query_hint">Search something</string>
-    <string name="no_more_item_found">No more item found</string>
+	<string name="app_name">RickAndMorty</string>
+	<string name="error_connectivity">Connection error</string>
+	<string name="error_server">Server error</string>
+	<string name="error_unknown">Unknown error</string>
+	<string name="query_hint">Search something</string>
+	<string name="no_more_item_found">No more item found</string>
 
-    <string name="status_filter">status</string>
-    <string name="gender_filter">gender</string>
-    <string name="gender">Gender:</string>
-    <string name="status">Status:</string>
-    <string name="species">Species:</string>
-    <string name="type">Type:</string>
-    <string name="url">URL:</string>
-    <string name="created">Created:</string>
-    <string name="location">Location:</string>
-    <string name="episodes">Episodes:</string>
+	<string name="status_filter">status</string>
+	<string name="gender_filter">gender</string>
+	<string name="gender">Gender:</string>
+	<string name="status">Status:</string>
+	<string name="species">Species:</string>
+	<string name="type">Type:</string>
+	<string name="url">URL:</string>
+	<string name="created">Created:</string>
+	<string name="location">Location:</string>
+	<string name="episodes">Episodes:</string>
 
-    <string name="tab_character">Characters</string>
-    <string name="tab_favorite">Favorites</string>
-    <string name="tab_fav_no_items">There are not favorites to show</string>
-    <string name="tab_character_no_items">There are not characters to show</string>
+	<string name="tab_character">Characters</string>
+	<string name="tab_favorite">Favorites</string>
+	<string name="tab_fav_no_items">There are not favorites to show</string>
+	<string name="tab_character_no_items">There are not characters to show</string>
 
-    <!--    contentDescription-->
-    <string name="share">SHARE</string>
-    <string name="favorite">FAVORITE</string>
-    <string name="close">CLOSE</string>
-    <string name="search">SEARCH</string>
-    <string name="icon">ICON</string>
-    <string name="image">IMAGE</string>
-    <string name="menu">MENU</string>
+	<!--    contentDescription-->
+	<string name="share">SHARE</string>
+	<string name="favorite">FAVORITE</string>
+	<string name="close">CLOSE</string>
+	<string name="search">SEARCH</string>
+	<string name="icon">ICON</string>
+	<string name="image">IMAGE</string>
+	<string name="menu">MENU</string>
 
-    <string-array name="status_list">
-        <item>all</item>
-        <item>alive</item>
-        <item>dead</item>
-        <item>unknown</item>
-    </string-array>
+	<string-array name="status_list">
+		<item>all</item>
+		<item>alive</item>
+		<item>dead</item>
+		<item>unknown</item>
+	</string-array>
 
-    <string-array name="gender_list">
-        <item>all</item>
-        <item>female</item>
-        <item>male</item>
-        <item>genderless</item>
-        <item>unknown</item>
-    </string-array>
+	<string-array name="gender_list">
+		<item>all</item>
+		<item>female</item>
+		<item>male</item>
+		<item>genderless</item>
+		<item>unknown</item>
+	</string-array>
 </resources>

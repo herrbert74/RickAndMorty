@@ -8,32 +8,32 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Black,
-    secondary = White,
-    tertiary = GrayLight
+	primary = Black,
+	secondary = White,
+	tertiary = GrayLight
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = White,
-    secondary = Black,
-    tertiary = GrayDark,
+	primary = White,
+	secondary = Black,
+	tertiary = GrayDark,
 )
 
 @Composable
 fun RickAndMortyTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+	darkTheme: Boolean = isSystemInDarkTheme(),
+	content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColorScheme
-    } else {
-        LightColorScheme
-    }
+	val colors = if (darkTheme) {
+		DarkColorScheme
+	} else {
+		LightColorScheme
+	}
 
-    MaterialTheme(
-        colorScheme = colors,
-        typography = Typography,
-        shapes = Shapes(),
-        content = content
-    )
+	MaterialTheme(
+		colorScheme = colors,
+		typography = Typography,
+		shapes = Shapes(),
+		content = content
+	)
 }

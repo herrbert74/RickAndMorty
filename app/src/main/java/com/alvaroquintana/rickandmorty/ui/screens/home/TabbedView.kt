@@ -29,52 +29,52 @@ import kotlinx.coroutines.launch
 @ExperimentalFoundationApi
 @Composable
 fun TabbedView(onNavigate: (Int) -> Unit, vm: HomeViewModel = hiltViewModel()) {
-    val context = LocalContext.current
-    val pagerState = rememberPagerState(pageCount = { 2 })
-    val state by vm.state.collectAsState()
+	val context = LocalContext.current
+	val pagerState = rememberPagerState(pageCount = { 2 })
+	val state by vm.state.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        TabbedViewPager(tabs = context.listOfTabs(), pagerState = pagerState) { selectedTabIndex ->
-            vm.selectedTabIndex = selectedTabIndex
-            MediaList(selectedTabIndex = selectedTabIndex, onClick = { onNavigate(it.id) })
-        }
-    }
-    CenteredCircularProgressIndicator(state.loading)
+	Column(modifier = Modifier.fillMaxSize()) {
+		TabbedViewPager(tabs = context.listOfTabs(), pagerState = pagerState) { selectedTabIndex ->
+			vm.selectedTabIndex = selectedTabIndex
+			MediaList(selectedTabIndex = selectedTabIndex, onClick = { onNavigate(it.id) })
+		}
+	}
+	CenteredCircularProgressIndicator(state.loading)
 }
 
 @Composable
 fun TabbedViewPager(
-    tabs: List<String>,
-    pagerState: PagerState,
-    modifier: Modifier = Modifier,
-    content: @Composable (selectedTabIndex: Int) -> Unit
+	tabs: List<String>,
+	pagerState: PagerState,
+	modifier: Modifier = Modifier,
+	content: @Composable (selectedTabIndex: Int) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
+	val scope = rememberCoroutineScope()
 
-    Column(modifier) {
-        TabRow(
-            selectedTabIndex = pagerState.currentPage,
-            containerColor = Transparent,
-            indicator = { tabPositions ->
-                SecondaryIndicator(
-                    color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage])
-                )
-            }
-        ) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    text = { Text(title) },
-                    selectedContentColor = MaterialTheme.colorScheme.secondary,
-                    unselectedContentColor = MaterialTheme.colorScheme.tertiary,
-                    selected = pagerState.currentPage == index,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
-                )
-            }
-        }
+	Column(modifier) {
+		TabRow(
+			selectedTabIndex = pagerState.currentPage,
+			containerColor = Transparent,
+			indicator = { tabPositions ->
+				SecondaryIndicator(
+					color = MaterialTheme.colorScheme.secondary,
+					modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage])
+				)
+			}
+		) {
+			tabs.forEachIndexed { index, title ->
+				Tab(
+					text = { Text(title) },
+					selectedContentColor = MaterialTheme.colorScheme.secondary,
+					unselectedContentColor = MaterialTheme.colorScheme.tertiary,
+					selected = pagerState.currentPage == index,
+					onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
+				)
+			}
+		}
 
-        HorizontalPager(state = pagerState) { page ->
-            content(page)
-        }
-    }
+		HorizontalPager(state = pagerState) { page ->
+			content(page)
+		}
+	}
 }

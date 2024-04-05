@@ -25,24 +25,23 @@ data class Character(
 )
 
 data class EpisodeList(
-    val episodeList: ArrayList<String>
+	val episodeList: ArrayList<String>
 )
 
 data class DataObject(
-    val name: String,
-    val url: String
+	val name: String,
+	val url: String
 )
 
 class EpisodeConverter {
 
-    @TypeConverter
-    fun fromEpisode(value: EpisodeList?): String {
-        return Gson().toJson(value ?: EpisodeList(ArrayList()))
-    }
+	@TypeConverter
+	fun fromEpisode(value: EpisodeList?): String {
+		return Gson().toJson(value ?: EpisodeList(ArrayList()))
+	}
 
-
-    @TypeConverter
-    fun toEpisode(value: String): EpisodeList {
-        return Gson().fromJson(value, EpisodeList::class.java)
-    }
+	@TypeConverter
+	fun toEpisode(value: String): EpisodeList {
+		return Gson().fromJson(value, EpisodeList::class.java)
+	}
 }

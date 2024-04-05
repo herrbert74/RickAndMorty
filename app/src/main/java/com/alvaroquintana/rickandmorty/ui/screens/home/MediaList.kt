@@ -35,89 +35,88 @@ const val DELAY_TO_SHOW_CARD_ANIMATION = 200L
 @ExperimentalFoundationApi
 @Composable
 fun MediaList(
-    selectedTabIndex: Int,
-    onClick: (Character) -> Unit,
-    vm: HomeViewModel = hiltViewModel()
+	selectedTabIndex: Int,
+	onClick: (Character) -> Unit,
+	vm: HomeViewModel = hiltViewModel()
 ) {
-    val listState = rememberLazyListState()
-    val state by vm.state.collectAsState()
-    val favList by vm.favState.collectAsState()
-    val characterList = state.characterList ?: emptyList()
+	val listState = rememberLazyListState()
+	val state by vm.state.collectAsState()
+	val favList by vm.favState.collectAsState()
+	val characterList = state.characterList ?: emptyList()
 
-    if (selectedTabIndex == TAB_CHARACTERS) {
-        LoadList(onClick, listState, characterList, R.string.tab_character_no_items)
-        LoadMoreItem(state.loading, listState.layoutInfo)
-        ShowNoMoreItemFound(state.noMoreItemFound)
-    } else {
-        LoadList(onClick, listState, favList, R.string.tab_fav_no_items)
-    }
+	if (selectedTabIndex == TAB_CHARACTERS) {
+		LoadList(onClick, listState, characterList, R.string.tab_character_no_items)
+		LoadMoreItem(state.loading, listState.layoutInfo)
+		ShowNoMoreItemFound(state.noMoreItemFound)
+	} else {
+		LoadList(onClick, listState, favList, R.string.tab_fav_no_items)
+	}
 
-    ShowError(state.error)
-    LaunchedEffect(favList) {
-        vm.reloadListWithFav()
-    }
+	ShowError(state.error)
+	LaunchedEffect(favList) {
+		vm.reloadListWithFav()
+	}
 }
 
 @Composable
 fun LoadList(
-    onClick: (Character) -> Unit,
-    listState: LazyListState,
-    list: List<Character>,
-    resIdNoItemsFound: Int,
-    vm: HomeViewModel = hiltViewModel()
+	onClick: (Character) -> Unit,
+	listState: LazyListState,
+	list: List<Character>,
+	resIdNoItemsFound: Int,
+	vm: HomeViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
+	val context = LocalContext.current
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        state = listState,
-        contentPadding = PaddingValues(paddingXsmall)
-    ) {
-        if (list.isEmpty()) {
-            item {
-                Text(
-                    text = context.getString(resIdNoItemsFound),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 20.sp
-                )
-            }
-        } else {
-            itemsIndexed(list) { index, item ->
-                MediaListItem(
-                    index = index,
-                    mediaItem = item,
-                    visible = index < vm.visibleCards,
-                    onClick = { onClick(item) },
-                    modifier = Modifier.padding(paddingXsmall)
-                )
+	LazyColumn(
+		modifier = Modifier.fillMaxSize(),
+		state = listState,
+		contentPadding = PaddingValues(paddingXsmall)
+	) {
+		if (list.isEmpty()) {
+			item {
+				Text(
+					text = context.getString(resIdNoItemsFound),
+					modifier = Modifier
+						.fillMaxSize()
+						.padding(16.dp),
+					color = MaterialTheme.colorScheme.secondary,
+					fontSize = 20.sp
+				)
+			}
+		} else {
+			itemsIndexed(list) { index, item ->
+				MediaListItem(
+					index = index,
+					mediaItem = item,
+					visible = index < vm.visibleCards,
+					onClick = { onClick(item) },
+					modifier = Modifier.padding(paddingXsmall)
+				)
 
-                LaunchedEffect(vm.visibleCards) {
-                    if (vm.visibleCards < list.size) {
-                        delay(DELAY_TO_SHOW_CARD_ANIMATION)
-                        vm.visibleCards++
-                    }
-                }
-            }
-        }
-    }
+				LaunchedEffect(vm.visibleCards) {
+					if (vm.visibleCards < list.size) {
+						delay(DELAY_TO_SHOW_CARD_ANIMATION)
+						vm.visibleCards++
+					}
+				}
+			}
+		}
+	}
 }
 
 @Composable
 fun LoadMoreItem(
-    isLoading: Boolean,
-    layoutInfo: LazyListLayoutInfo,
-    vm: HomeViewModel = hiltViewModel()
+	isLoading: Boolean,
+	layoutInfo: LazyListLayoutInfo,
+	vm: HomeViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(layoutInfo) {
-        val totalItems = layoutInfo.totalItemsCount
-        val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+	LaunchedEffect(layoutInfo) {
+		val totalItems = layoutInfo.totalItemsCount
+		val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
 
-        if (lastVisibleItemIndex == totalItems - 1 && !isLoading) {
-            vm.updateList()
-        }
-    }
+		if (lastVisibleItemIndex == totalItems - 1 && !isLoading) {
+			vm.updateList()
+		}
+	}
 }
-

@@ -45,7 +45,6 @@ import com.alvaroquintana.rickandmorty.ui.composables.CenteredCircularProgressIn
 import com.alvaroquintana.rickandmorty.ui.composables.FavScaleAnimation
 import com.alvaroquintana.rickandmorty.ui.composables.ShowError
 import com.alvaroquintana.rickandmorty.ui.theme.Red
-import com.alvaroquintana.rickandmorty.ui.theme.RickAndMortyTheme
 import com.alvaroquintana.rickandmorty.ui.theme.descriptionHeight
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -54,128 +53,127 @@ import java.util.Date
 @ExperimentalFoundationApi
 @Composable
 fun DetailScreen(characterId: Int, onUpClick: () -> Unit, vm: DetailViewModel = hiltViewModel()) {
-    val context = LocalContext.current
-    val state by vm.state.collectAsState()
-    val character = state.character
-    val scrollState = rememberScrollState()
-    val error = state.error
+	val context = LocalContext.current
+	val state by vm.state.collectAsState()
+	val character = state.character
+	val scrollState = rememberScrollState()
+	val error = state.error
 
-    LaunchedEffect(true) {
-        vm.findCharacter(characterId = characterId)
-    }
+	LaunchedEffect(true) {
+		vm.findCharacter(characterId = characterId)
+	}
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = character?.name ?: "") },
-                navigationIcon = { ArrowBackIcon(onUpClick) },
-                actions = {
-                    IconButton(onClick = {
-                        character?.let { character ->
-                            context.shareCharacter(character.name, character.url)
-                        }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Share,
-                            contentDescription = context.getString(R.string.share)
-                        )
-                    }
-                }
-            )
-        },
-        floatingActionButton = {
-            character?.let { character ->
-                FloatingBtn(character, vm)
-            }
-        },
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-        ) {
-            AsyncImage(
-                model = character?.image,
-                contentDescription = context.getString(R.string.image),
-                modifier = Modifier
-                    .height(descriptionHeight)
-                    .fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+	Scaffold(
+		topBar = {
+			TopAppBar(
+				title = { Text(text = character?.name ?: "") },
+				navigationIcon = { ArrowBackIcon(onUpClick) },
+				actions = {
+					IconButton(onClick = {
+						character?.let { character ->
+							context.shareCharacter(character.name, character.url)
+						}
+					}) {
+						Icon(
+							imageVector = Icons.Default.Share,
+							contentDescription = context.getString(R.string.share)
+						)
+					}
+				}
+			)
+		},
+		floatingActionButton = {
+			character?.let { character ->
+				FloatingBtn(character, vm)
+			}
+		},
+	) { padding ->
+		Column(
+			modifier = Modifier
+				.padding(padding)
+				.fillMaxSize()
+				.verticalScroll(scrollState)
+		) {
+			AsyncImage(
+				model = character?.image,
+				contentDescription = context.getString(R.string.image),
+				modifier = Modifier
+					.height(descriptionHeight)
+					.fillMaxSize(),
+				contentScale = ContentScale.Crop
+			)
 
-            Column(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxSize()
-            ) {
-                character?.let { character ->
-                    FillContent(character)
-                }
-            }
-        }
-    }
-    CenteredCircularProgressIndicator(state.loading)
+			Column(
+				modifier = Modifier
+					.padding(20.dp)
+					.fillMaxSize()
+			) {
+				character?.let { character ->
+					FillContent(character)
+				}
+			}
+		}
+	}
+	CenteredCircularProgressIndicator(state.loading)
 
-    ShowError(error)
+	ShowError(error)
 }
 
 @Composable
 private fun FloatingBtn(character: Character, vm: DetailViewModel = hiltViewModel()) {
-    val context = LocalContext.current
+	val context = LocalContext.current
 
-    val clickEnabled = remember { mutableStateOf(true) }
-    var selected by remember { mutableStateOf(false) }
-    val scale = remember { Animatable(initialValue = 1f) }
-    FavScaleAnimation(selected, clickEnabled, scale, character.favorite)
+	val clickEnabled = remember { mutableStateOf(true) }
+	var selected by remember { mutableStateOf(false) }
+	val scale = remember { Animatable(initialValue = 1f) }
+	FavScaleAnimation(selected, clickEnabled, scale, character.favorite)
 
-    FloatingActionButton(
-        modifier = Modifier.scale(scale = scale.value),
-        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-        onClick = {
-            if (clickEnabled.value) {
-                selected = !character.favorite
-                vm.saveFavorite(!character.favorite, character)
-            }
-        }
-    ) {
-        Icon(
-            imageVector = if (character.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-            tint = Red,
-            contentDescription = context.getString(R.string.favorite)
-        )
-    }
+	FloatingActionButton(
+		modifier = Modifier.scale(scale = scale.value),
+		containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+		onClick = {
+			if (clickEnabled.value) {
+				selected = !character.favorite
+				vm.saveFavorite(!character.favorite, character)
+			}
+		}
+	) {
+		Icon(
+			imageVector = if (character.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+			tint = Red,
+			contentDescription = context.getString(R.string.favorite)
+		)
+	}
 }
 
 @Composable
 private fun FillContent(character: Character) {
-    val context = LocalContext.current
+	val context = LocalContext.current
 
-    character.apply {
-        val text = buildSpannedString {
-            appendLine(context.getString(R.string.gender) + " " + gender + "\n")
-            appendLine(context.getString(R.string.status) + " " + status + "\n")
-            appendLine(context.getString(R.string.species) + " " + species + "\n")
-            if (type.isNotEmpty()) appendLine(context.getString(R.string.type) + " " + type + "\n")
-            appendLine(context.getString(R.string.url) + " " + url + "\n")
-            appendLine(context.getString(R.string.created) + " " + parseDateString(created) + "\n")
-            appendLine(context.getString(R.string.location) + " " + location.name + "\n")
-            appendLine(context.getString(R.string.episodes) + " " + episode.map {
-                it.toUri().path?.split("/")?.last()
-            })
-        }.toString()
-        Text(text = text)
-    }
+	character.apply {
+		val text = buildSpannedString {
+			appendLine(context.getString(R.string.gender) + " " + gender + "\n")
+			appendLine(context.getString(R.string.status) + " " + status + "\n")
+			appendLine(context.getString(R.string.species) + " " + species + "\n")
+			if (type.isNotEmpty()) appendLine(context.getString(R.string.type) + " " + type + "\n")
+			appendLine(context.getString(R.string.url) + " " + url + "\n")
+			appendLine(context.getString(R.string.created) + " " + parseDateString(created) + "\n")
+			appendLine(context.getString(R.string.location) + " " + location.name + "\n")
+			appendLine(context.getString(R.string.episodes) + " " + episode.map {
+				it.toUri().path?.split("/")?.last()
+			})
+		}.toString()
+		Text(text = text)
+	}
 }
 
 @SuppressLint("SimpleDateFormat")
 private fun parseDateString(dateString: String): String? {
-    val patternInput = "yyyy-MM-dd'T'HH:mm:ss"
-    val patternOutput = "yyyy-MM-dd HH:mm:ss"
+	val patternInput = "yyyy-MM-dd'T'HH:mm:ss"
+	val patternOutput = "yyyy-MM-dd HH:mm:ss"
 
-    val sdf = SimpleDateFormat(patternInput)
-    val output = SimpleDateFormat(patternOutput)
-    val d: Date = sdf.parse(dateString)!!
-    return output.format(d)
+	val sdf = SimpleDateFormat(patternInput)
+	val output = SimpleDateFormat(patternOutput)
+	val d: Date = sdf.parse(dateString)!!
+	return output.format(d)
 }
-

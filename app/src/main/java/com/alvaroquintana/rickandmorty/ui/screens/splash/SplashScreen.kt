@@ -20,25 +20,25 @@ import com.alvaroquintana.rickandmorty.R
 @Composable
 fun SplashScreen(onNavigate: () -> Unit) {
 
-    val loadingComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_splash))
-    val loadingProgress by animateLottieCompositionAsState(loadingComposition)
+	val loadingComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_splash))
+	val loadingProgress by animateLottieCompositionAsState(loadingComposition)
 
-    Column(
-        modifier = Modifier.fillMaxHeight()
-    ) {
-        LottieAnimation(
-            composition = loadingComposition,
-            progress = { loadingProgress },
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxHeight()
-                .semantics { contentDescription = "Loading Animation" }
-        )
+	Column(
+		modifier = Modifier.fillMaxHeight()
+	) {
+		LottieAnimation(
+			composition = loadingComposition,
+			progress = { loadingProgress },
+			contentScale = ContentScale.Crop,
+			modifier = Modifier
+				.fillMaxHeight()
+				.semantics { contentDescription = "Loading Animation" }
+		)
 
-        LaunchedEffect(loadingProgress) {
-            if (loadingProgress >= 1f) {
-                onNavigate()
-            }
-        }
-    }
+		LaunchedEffect(loadingProgress) {
+			if (loadingProgress >= 1f) {
+				onNavigate()
+			}
+		}
+	}
 }

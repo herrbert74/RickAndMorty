@@ -18,58 +18,57 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntOffset
 import kotlin.math.roundToInt
 
-
 @Composable
 internal fun CollapsingLayout(
-    collapsingTop: @Composable BoxScope.() -> Unit,
-    bodyContent: @Composable BoxScope.() -> Unit,
-    modifier: Modifier = Modifier,
+	collapsingTop: @Composable BoxScope.() -> Unit,
+	bodyContent: @Composable BoxScope.() -> Unit,
+	modifier: Modifier = Modifier,
 ) {
-    var collapsingTopHeight by remember { mutableFloatStateOf(0f) }
+	var collapsingTopHeight by remember { mutableFloatStateOf(0f) }
 
-    var offset by remember { mutableFloatStateOf(0f) }
+	var offset by remember { mutableFloatStateOf(0f) }
 
-    fun calculateOffset(delta: Float): Offset {
-        val oldOffset = offset
-        val newOffset = (oldOffset + delta).coerceIn(-collapsingTopHeight, 0f)
-        offset = newOffset
-        return Offset(0f, newOffset - oldOffset)
-    }
+	fun calculateOffset(delta: Float): Offset {
+		val oldOffset = offset
+		val newOffset = (oldOffset + delta).coerceIn(-collapsingTopHeight, 0f)
+		offset = newOffset
+		return Offset(0f, newOffset - oldOffset)
+	}
 
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset =
-                calculateOffset(available.y)
+	val nestedScrollConnection = remember {
+		object : NestedScrollConnection {
+			override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset =
+				calculateOffset(available.y)
 
-            override fun onPostScroll(
-                consumed: Offset,
-                available: Offset,
-                source: NestedScrollSource,
-            ): Offset = calculateOffset(available.y)
-        }
-    }
+			override fun onPostScroll(
+				consumed: Offset,
+				available: Offset,
+				source: NestedScrollSource,
+			): Offset = calculateOffset(available.y)
+		}
+	}
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .nestedScroll(nestedScrollConnection),
-    ) {
-        Box(
-            modifier = Modifier
-                .onSizeChanged { size ->
-                    collapsingTopHeight = size.height.toFloat()
-                }
-                .offset { IntOffset(x = 0, y = offset.roundToInt()) },
-            content = collapsingTop,
-        )
-        Box(
-            modifier = Modifier.offset {
-                IntOffset(
-                    x = 0,
-                    y = (collapsingTopHeight + offset).roundToInt()
-                )
-            },
-            content = bodyContent,
-        )
-    }
+	Box(
+		modifier = modifier
+			.fillMaxSize()
+			.nestedScroll(nestedScrollConnection),
+	) {
+		Box(
+			modifier = Modifier
+				.onSizeChanged { size ->
+					collapsingTopHeight = size.height.toFloat()
+				}
+				.offset { IntOffset(x = 0, y = offset.roundToInt()) },
+			content = collapsingTop,
+		)
+		Box(
+			modifier = Modifier.offset {
+				IntOffset(
+					x = 0,
+					y = (collapsingTopHeight + offset).roundToInt()
+				)
+			},
+			content = bodyContent,
+		)
+	}
 }

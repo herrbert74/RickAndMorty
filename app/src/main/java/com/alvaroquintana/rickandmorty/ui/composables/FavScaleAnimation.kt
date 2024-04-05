@@ -12,31 +12,31 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun FavScaleAnimation(
-    selected: Boolean,
-    clickEnabled: MutableState<Boolean>,
-    scale: Animatable<Float, AnimationVector1D>,
-    isFavorite: Boolean
+	selected: Boolean,
+	clickEnabled: MutableState<Boolean>,
+	scale: Animatable<Float, AnimationVector1D>,
+	isFavorite: Boolean
 ) {
-    LaunchedEffect(selected) {
-        if (selected && !isFavorite) {
-            clickEnabled.value = false
+	LaunchedEffect(selected) {
+		if (selected && !isFavorite) {
+			clickEnabled.value = false
 
-            launch {
-                scale.animateTo(
-                    targetValue = 2f,
-                    animationSpec = tween(
-                        durationMillis = 50
-                    )
-                )
-                scale.animateTo(
-                    targetValue = 1f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioLowBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                )
-            }.join()
-            clickEnabled.value = true
-        }
-    }
+			launch {
+				scale.animateTo(
+					targetValue = 2f,
+					animationSpec = tween(
+						durationMillis = 50
+					)
+				)
+				scale.animateTo(
+					targetValue = 1f,
+					animationSpec = spring(
+						dampingRatio = Spring.DampingRatioLowBouncy,
+						stiffness = Spring.StiffnessLow
+					)
+				)
+			}.join()
+			clickEnabled.value = true
+		}
+	}
 }
