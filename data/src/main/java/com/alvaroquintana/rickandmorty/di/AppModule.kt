@@ -5,10 +5,8 @@ import androidx.room.Room
 import com.alvaroquintana.data.BuildConfig
 import com.alvaroquintana.rickandmorty.data.database.FavoriteCharacterDao
 import com.alvaroquintana.rickandmorty.data.database.FavoriteDataBase
-import com.alvaroquintana.rickandmorty.data.database.RoomDataSource
 import com.alvaroquintana.rickandmorty.data.network.RickAndMortyService
 import com.alvaroquintana.rickandmorty.data.repository.CharacterAccessor
-import com.alvaroquintana.rickandmorty.data.source.LocalDataSource
 import com.alvaroquintana.rickandmorty.domain.api.CharacterRepository
 import dagger.Binds
 import dagger.Module
@@ -67,8 +65,5 @@ abstract class AppDataModule {
 
 	@Binds
 	abstract fun bindCharacterRepository(characterAccessor: CharacterAccessor): CharacterRepository
-
-	@Binds
-	abstract fun bindLocalDataSource(localDataSource: RoomDataSource): LocalDataSource
 
 }
